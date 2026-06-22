@@ -33,24 +33,11 @@ public abstract class AbstractTextParser implements TextParser {
         log.debug("{} processing: '{}'", this.getClass().getSimpleName(),
                 text.length() > 50 ? text.substring(0, 50) + "..." : text);
 
-        TextComponent result = handleRequest(text);
-
-        if (result != null && successor != null) {
-            TextComponent successorResult = successor.parse(text);
-            if (successorResult != null) {
-                return combineResults(result, successorResult);
-            }
-        }
-
-        return result;
+        return handleRequest(text);
     }
 
     @Override
     public abstract TextComponent handleRequest(String text) throws TextCustomException;
-
-    protected TextComponent combineResults(TextComponent current, TextComponent next) {
-        return current;
-    }
 
     private static class DefaultTextParser extends AbstractTextParser {
         private static final DefaultTextParser instance = new DefaultTextParser();

@@ -1,9 +1,10 @@
-package com.innowise.n1jel.handling.parser;
+package com.innowise.n1jel.handling.parser.impl;
 
-import com.innowise.n1jel.handling.entity.Paragraph;
-import com.innowise.n1jel.handling.entity.Text;
 import com.innowise.n1jel.handling.entity.TextComponent;
+import com.innowise.n1jel.handling.entity.TextComponentType;
+import com.innowise.n1jel.handling.entity.TextComposite;
 import com.innowise.n1jel.handling.exception.TextCustomException;
+import com.innowise.n1jel.handling.parser.AbstractTextParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,7 +28,7 @@ public class ParagraphParser extends AbstractTextParser {
             return null;
         }
 
-        Text textComposite = new Text();
+        TextComposite textComposite = new TextComposite(TextComponentType.TEXT);
         String[] paragraphs = text.split(PARAGRAPH_REGEX);
 
         for (String paragraphText : paragraphs) {
@@ -35,7 +36,7 @@ public class ParagraphParser extends AbstractTextParser {
                 log.debug("Found paragraph: '{}'",
                         paragraphText.length() > 30 ? paragraphText.substring(0, 30) + "..." : paragraphText);
 
-                Paragraph paragraph = new Paragraph(paragraphText);
+                TextComposite paragraph = new TextComposite(TextComponentType.PARAGRAPH);
 
                 TextComponent parsedParagraph = successor.handleRequest(paragraphText);
 

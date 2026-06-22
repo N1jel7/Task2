@@ -1,18 +1,16 @@
-package com.innowise.n1jel.handling.parser;
+package com.innowise.n1jel.handling.parser.impl;
 
-import com.innowise.n1jel.handling.entity.Lexeme;
-import com.innowise.n1jel.handling.entity.Punctuation;
 import com.innowise.n1jel.handling.entity.TextComponent;
-import com.innowise.n1jel.handling.entity.Word;
+import com.innowise.n1jel.handling.entity.TextComponentType;
+import com.innowise.n1jel.handling.entity.TextComposite;
+import com.innowise.n1jel.handling.entity.TextLeaf;
 import com.innowise.n1jel.handling.exception.TextCustomException;
+import com.innowise.n1jel.handling.parser.AbstractTextParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class WordParser extends AbstractTextParser {
-    private static final Logger logger = LogManager.getLogger(WordParser.class);
+    private static final Logger log = LogManager.getLogger(WordParser.class);
     private static WordParser instance;
 
     private WordParser() {
@@ -31,36 +29,36 @@ public class WordParser extends AbstractTextParser {
             return null;
         }
 
-        logger.debug("Processing lexeme: '{}'", text);
+        log.debug("Processing lexeme: '{}'", text);
 
         if (text.matches(WORD_REGEX)) {
-            logger.debug("Word: '{}'", text);
-            return new Word(text);
+            log.debug("Word: '{}'", text);
+            return new TextLeaf(text, TextComponentType.WORD);
         }
 
         if (text.matches(PUNCTUATION_REGEX)) {
-            logger.debug("Punctuation: '{}'", text);
-            return new Punctuation(text);
+            log.debug("Punctuation: '{}'", text);
+            return new TextLeaf(text, TextComponentType.PUNCTUATION);
         }
 
         return splitMixedLexeme(text);
     }
 
-    private TextComponent splitMixedLexeme(String text) {
-        List<TextComponent> components = new ArrayList<>();
+    private TextComponent splitMixedLexeme(String text) throws TextCustomException {
         StringBuilder currentWord = new StringBuilder();
         StringBuilder currentPunct = new StringBuilder();
+        TextComposite lexeme = new TextComposite(TextComponentType.LEXEME);
 
         for (char c : text.toCharArray()) {
             if (Character.isLetter(c)) {
                 if (!currentPunct.isEmpty()) {
-                    components.add(new Punctuation(currentPunct.toString()));
+                    lexeme.add(new TextLeaf(currentPunct.toString(), TextComponentType.PUNCTUATION));
                     currentPunct = new StringBuilder();
                 }
                 currentWord.append(c);
             } else {
                 if (!currentWord.isEmpty()) {
-                    components.add(new Word(currentWord.toString()));
+                    lexeme.add(new TextLeaf(currentWord.toString(), TextComponentType.WORD));
                     currentWord = new StringBuilder();
                 }
                 currentPunct.append(c);
@@ -68,23 +66,14 @@ public class WordParser extends AbstractTextParser {
         }
 
         if (!currentWord.isEmpty()) {
-            components.add(new Word(currentWord.toString()));
+            lexeme.add(new TextLeaf(currentWord.toString(), TextComponentType.WORD));
         }
         if (!currentPunct.isEmpty()) {
-            components.add(new Punctuation(currentPunct.toString()));
+            lexeme.add(new TextLeaf(currentPunct.toString(), TextComponentType.PUNCTUATION));
         }
 
-        if (components.size() == 1) {
-            return components.getFirst();
-        }
-
-        Lexeme lexeme = new Lexeme(text);
-        for (TextComponent comp : components) {
-            try {
-                lexeme.add(comp);
-            } catch (TextCustomException e) {
-                logger.error("Failed to add component to lexeme", e);
-            }
+        if (lexeme.getChildren().size() == 1) {
+            return lexeme.getChildren().getFirst();
         }
 
         return lexeme;

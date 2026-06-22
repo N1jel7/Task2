@@ -1,9 +1,10 @@
-package com.innowise.n1jel.handling.parser;
+package com.innowise.n1jel.handling.parser.impl;
 
-import com.innowise.n1jel.handling.entity.Paragraph;
-import com.innowise.n1jel.handling.entity.Sentence;
 import com.innowise.n1jel.handling.entity.TextComponent;
+import com.innowise.n1jel.handling.entity.TextComponentType;
+import com.innowise.n1jel.handling.entity.TextComposite;
 import com.innowise.n1jel.handling.exception.TextCustomException;
+import com.innowise.n1jel.handling.parser.AbstractTextParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,7 +28,7 @@ public class SentenceParser extends AbstractTextParser {
             return null;
         }
 
-        Paragraph paragraph = new Paragraph(text);
+        TextComposite paragraph = new TextComposite(TextComponentType.PARAGRAPH);
         String[] sentenceParts = text.split(SENTENCE_REGEX);
 
         for (String sentenceText : sentenceParts) {
@@ -35,7 +36,7 @@ public class SentenceParser extends AbstractTextParser {
                 String fullSentence = findFullSentence(text, sentenceText);
                 log.debug("Found sentence: '{}'", fullSentence);
 
-                Sentence sentence = new Sentence(fullSentence);
+                TextComposite sentence = new TextComposite(TextComponentType.SENTENCE);
 
                 TextComponent parsedSentence = successor.handleRequest(fullSentence);
 

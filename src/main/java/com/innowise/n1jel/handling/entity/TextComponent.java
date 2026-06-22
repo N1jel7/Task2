@@ -4,22 +4,27 @@ import com.innowise.n1jel.handling.exception.TextCustomException;
 
 import java.util.List;
 
-public interface TextComponent {
-    String getContent();
+public abstract class TextComponent {
 
-    void add(TextComponent component) throws TextCustomException;
+    public abstract TextComponentType getType();
 
-    void remove(TextComponent component) throws TextCustomException;
+    public void add(TextComponent component) throws TextCustomException {
+        throw new TextCustomException("Cannot add child to a leaf node");
+    }
 
-    List<TextComponent> getChildren();
+    public void remove(TextComponent component) throws TextCustomException {
+        throw new TextCustomException("Cannot remove child from a leaf node");
+    }
 
-    int getCharacterCount();
+    public List<TextComponent> getChildren() {
+        return List.of();
+    }
 
-    int getLetterCount();
+    public String getContent() {
+        return "";
+    }
 
-    String restore();
+    @Override
+    public abstract String toString();
 
-    boolean isLeaf();
-
-    TextComponentType getType();
 }

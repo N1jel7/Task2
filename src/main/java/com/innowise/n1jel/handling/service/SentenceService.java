@@ -8,6 +8,4 @@ public interface SentenceService {
 
     String sortSentencesByLetterFrequency(TextComponent root, char letter);
 
-    String swapFirstAndLastLexemes(TextComponent root);
-
 }

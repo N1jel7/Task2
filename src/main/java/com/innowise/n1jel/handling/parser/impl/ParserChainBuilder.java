@@ -1,5 +1,6 @@
-package com.innowise.n1jel.handling.parser;
+package com.innowise.n1jel.handling.parser.impl;
 
+import com.innowise.n1jel.handling.parser.TextParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

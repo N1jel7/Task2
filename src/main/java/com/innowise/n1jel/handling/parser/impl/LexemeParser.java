@@ -1,9 +1,10 @@
-package com.innowise.n1jel.handling.parser;
+package com.innowise.n1jel.handling.parser.impl;
 
-import com.innowise.n1jel.handling.entity.Lexeme;
-import com.innowise.n1jel.handling.entity.Sentence;
 import com.innowise.n1jel.handling.entity.TextComponent;
+import com.innowise.n1jel.handling.entity.TextComponentType;
+import com.innowise.n1jel.handling.entity.TextComposite;
 import com.innowise.n1jel.handling.exception.TextCustomException;
+import com.innowise.n1jel.handling.parser.AbstractTextParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,20 +28,22 @@ public class LexemeParser extends AbstractTextParser {
             return null;
         }
 
-        Sentence sentence = new Sentence(text);
+        TextComposite sentence = new TextComposite(TextComponentType.SENTENCE);
         String[] lexemes = text.split(LEXEME_REGEX);
 
         for (String lexemeText : lexemes) {
             if (!lexemeText.trim().isEmpty()) {
                 log.debug("Found lexeme: '{}'", lexemeText);
 
+                TextComposite lexeme = new TextComposite(TextComponentType.LEXEME);
+
                 TextComponent parsedLexeme = successor.handleRequest(lexemeText);
 
                 if (parsedLexeme != null) {
-                    sentence.add(parsedLexeme);
-                } else {
-                    sentence.add(new Lexeme(lexemeText));
+                    lexeme.add(parsedLexeme);
                 }
+
+                sentence.add(lexeme);
             }
         }
 
