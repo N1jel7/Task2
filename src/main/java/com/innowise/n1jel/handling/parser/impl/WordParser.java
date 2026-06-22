@@ -1,9 +1,9 @@
 package com.innowise.n1jel.handling.parser.impl;
 
 import com.innowise.n1jel.handling.entity.TextComponent;
-import com.innowise.n1jel.handling.entity.TextComponentType;
-import com.innowise.n1jel.handling.entity.TextComposite;
 import com.innowise.n1jel.handling.entity.TextLeaf;
+import com.innowise.n1jel.handling.entity.TextComposite;
+import com.innowise.n1jel.handling.entity.TextComponentType;
 import com.innowise.n1jel.handling.exception.TextCustomException;
 import com.innowise.n1jel.handling.parser.AbstractTextParser;
 import org.apache.logging.log4j.LogManager;
@@ -29,47 +29,48 @@ public class WordParser extends AbstractTextParser {
             return null;
         }
 
-        log.debug("Processing lexeme: '{}'", text);
-
-        if (text.matches(WORD_REGEX)) {
-            log.debug("Word: '{}'", text);
+        // Pure word
+        if (WORD_PATTERN.matcher(text).matches()) {
             return new TextLeaf(text, TextComponentType.WORD);
         }
 
-        if (text.matches(PUNCTUATION_REGEX)) {
-            log.debug("Punctuation: '{}'", text);
+        // Pure punctuation
+        if (PUNCTUATION_PATTERN.matcher(text).matches()) {
             return new TextLeaf(text, TextComponentType.PUNCTUATION);
         }
 
-        return splitMixedLexeme(text);
+        // Mixed - split into word and punctuation
+        return splitMixed(text);
     }
 
-    private TextComponent splitMixedLexeme(String text) throws TextCustomException {
-        StringBuilder currentWord = new StringBuilder();
-        StringBuilder currentPunct = new StringBuilder();
+    private TextComponent splitMixed(String text) {
         TextComposite lexeme = new TextComposite(TextComponentType.LEXEME);
+        StringBuilder current = new StringBuilder();
+        boolean isWord = Character.isLetter(text.charAt(0));
 
-        for (char c : text.toCharArray()) {
-            if (Character.isLetter(c)) {
-                if (!currentPunct.isEmpty()) {
-                    lexeme.add(new TextLeaf(currentPunct.toString(), TextComponentType.PUNCTUATION));
-                    currentPunct = new StringBuilder();
+        try {
+            for (char c : text.toCharArray()) {
+                boolean currentIsLetter = Character.isLetter(c);
+
+                if (currentIsLetter == isWord) {
+                    current.append(c);
+                } else {
+                    if (!current.isEmpty()) {
+                        TextComponentType type = isWord ? TextComponentType.WORD : TextComponentType.PUNCTUATION;
+                        lexeme.add(new TextLeaf(current.toString(), type));
+                    }
+                    current = new StringBuilder();
+                    current.append(c);
+                    isWord = currentIsLetter;
                 }
-                currentWord.append(c);
-            } else {
-                if (!currentWord.isEmpty()) {
-                    lexeme.add(new TextLeaf(currentWord.toString(), TextComponentType.WORD));
-                    currentWord = new StringBuilder();
-                }
-                currentPunct.append(c);
             }
-        }
 
-        if (!currentWord.isEmpty()) {
-            lexeme.add(new TextLeaf(currentWord.toString(), TextComponentType.WORD));
-        }
-        if (!currentPunct.isEmpty()) {
-            lexeme.add(new TextLeaf(currentPunct.toString(), TextComponentType.PUNCTUATION));
+            if (!current.isEmpty()) {
+                TextComponentType type = isWord ? TextComponentType.WORD : TextComponentType.PUNCTUATION;
+                lexeme.add(new TextLeaf(current.toString(), type));
+            }
+        } catch (TextCustomException e) {
+            log.error("Failed to split mixed lexeme", e);
         }
 
         if (lexeme.getChildren().size() == 1) {

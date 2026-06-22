@@ -21,14 +21,13 @@ public class TextFileReaderImpl implements TextFileReader {
 
         try {
             Path filePath = Path.of(path);
-            String lines = String.valueOf(Files.readAllLines(filePath));
+            String content = Files.readString(filePath);
             log.info("File read successfully: {}", path);
-            return lines;
+            return content;
 
         } catch (IOException e) {
             log.error("Failed to read file: {}", path, e);
             throw new TextCustomException("Failed to read file: " + path, e);
         }
-
     }
 }

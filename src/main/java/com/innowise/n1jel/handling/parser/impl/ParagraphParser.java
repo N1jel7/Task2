@@ -1,8 +1,8 @@
 package com.innowise.n1jel.handling.parser.impl;
 
 import com.innowise.n1jel.handling.entity.TextComponent;
-import com.innowise.n1jel.handling.entity.TextComponentType;
 import com.innowise.n1jel.handling.entity.TextComposite;
+import com.innowise.n1jel.handling.entity.TextComponentType;
 import com.innowise.n1jel.handling.exception.TextCustomException;
 import com.innowise.n1jel.handling.parser.AbstractTextParser;
 import org.apache.logging.log4j.LogManager;
@@ -29,16 +29,18 @@ public class ParagraphParser extends AbstractTextParser {
         }
 
         TextComposite textComposite = new TextComposite(TextComponentType.TEXT);
-        String[] paragraphs = text.split(PARAGRAPH_REGEX);
+        String[] paragraphs = PARAGRAPH_PATTERN.split(text);
 
         for (String paragraphText : paragraphs) {
-            if (!paragraphText.trim().isEmpty()) {
+            String trimmed = paragraphText.trim();
+            if (!trimmed.isEmpty()) {
                 log.debug("Found paragraph: '{}'",
-                        paragraphText.length() > 30 ? paragraphText.substring(0, 30) + "..." : paragraphText);
+                        trimmed.length() > 30 ? trimmed.substring(0, 30) + "..." : trimmed);
 
                 TextComposite paragraph = new TextComposite(TextComponentType.PARAGRAPH);
 
-                TextComponent parsedParagraph = successor.handleRequest(paragraphText);
+                // Pass trimmed text directly without normalization
+                TextComponent parsedParagraph = successor.handleRequest(trimmed);
 
                 if (parsedParagraph != null) {
                     for (TextComponent child : parsedParagraph.getChildren()) {
@@ -48,6 +50,17 @@ public class ParagraphParser extends AbstractTextParser {
 
                 textComposite.add(paragraph);
             }
+        }
+
+        if (textComposite.getChildren().isEmpty()) {
+            TextComposite paragraph = new TextComposite(TextComponentType.PARAGRAPH);
+            TextComponent parsedParagraph = successor.handleRequest(text.trim());
+            if (parsedParagraph != null) {
+                for (TextComponent child : parsedParagraph.getChildren()) {
+                    paragraph.add(child);
+                }
+            }
+            textComposite.add(paragraph);
         }
 
         log.info("Parsed {} paragraphs", textComposite.getChildren().size());

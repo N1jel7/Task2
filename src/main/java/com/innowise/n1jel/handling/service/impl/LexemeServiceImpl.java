@@ -29,13 +29,11 @@ public class LexemeServiceImpl implements LexemeService {
             return;
         }
 
-        // If it's a sentence - swap its lexemes
         if (component.getType() == TextComponentType.SENTENCE) {
             swapLexemesInSentence(component);
             return;
         }
 
-        // If it's a composite - process all children
         for (TextComponent child : component.getChildren()) {
             processSentences(child);
         }
@@ -49,20 +47,23 @@ public class LexemeServiceImpl implements LexemeService {
             return;
         }
 
-        TextComponent firstLexeme = lexemes.getFirst();
-        TextComponent lastLexeme = lexemes.getLast();
+        TextComponent firstLexeme = lexemes.get(0);
+        TextComponent lastLexeme = lexemes.get(lexemes.size() - 1);
 
-        log.debug("Swapping first lexeme '{}' with last lexeme '{}'",
-                firstLexeme.getContent(), lastLexeme.getContent());
+        String firstContent = firstLexeme.toString();
+        String lastContent = lastLexeme.toString();
 
-        // Remove both lexemes
+        log.debug("Swapping first lexeme '{}' with last lexeme '{}'", firstContent, lastContent);
+
+        // Remove and add in swapped order using indices
         try {
-            sentence.getChildren().removeFirst();
-            sentence.getChildren().remove(lexemes.size() - 2);
+            // Remove last first (to avoid index shifting issues)
+            lexemes.remove(lexemes.size() - 1);
+            lexemes.remove(0);
 
             // Add them back in swapped order
-            sentence.getChildren().addFirst(lastLexeme);
-            sentence.getChildren().add(firstLexeme);
+            lexemes.add(0, lastLexeme);
+            lexemes.add(firstLexeme);
         } catch (Exception e) {
             log.error("Failed to swap lexemes", e);
         }
