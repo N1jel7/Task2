@@ -1,14 +1,11 @@
 package com.innowise.n1jel.handling.entity;
 
 import com.innowise.n1jel.handling.exception.TextCustomException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TextComposite extends TextComponent {
-    private static final Logger log = LogManager.getLogger(TextComposite.class);
 
     private final TextComponentType type;
     private final List<TextComponent> components;
@@ -24,12 +21,18 @@ public class TextComposite extends TextComponent {
     }
 
     @Override
-    public void add(TextComponent component) throws TextCustomException {
+    public boolean add(TextComponent component) throws TextCustomException {
         if (component == null) {
             throw new TextCustomException("Cannot add null component");
         }
-        components.add(component);
-        log.debug("Added component of type {} to {}", component.getType(), type);
+
+        return components.add(component);
+
+    }
+
+    @Override
+    public boolean remove(TextComponent component) {
+        return components.remove(component);
     }
 
     @Override

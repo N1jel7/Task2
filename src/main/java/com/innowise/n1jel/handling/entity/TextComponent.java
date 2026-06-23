@@ -8,11 +8,11 @@ public abstract class TextComponent {
 
     public abstract TextComponentType getType();
 
-    public void add(TextComponent component) throws TextCustomException {
+    public boolean add(TextComponent component) throws TextCustomException {
         throw new TextCustomException("Cannot add child to a leaf node");
     }
 
-    public void remove(TextComponent component) throws TextCustomException {
+    public boolean remove(TextComponent component) throws TextCustomException {
         throw new TextCustomException("Cannot remove child from a leaf node");
     }
 
