@@ -10,9 +10,12 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SentenceParser extends AbstractTextParser {
     private static final Logger log = LogManager.getLogger(SentenceParser.class);
+    private static final Pattern SENTENCE_PATTERN = Pattern.compile(SENTENCE_REGEX);
     private static SentenceParser instance;
 
     private SentenceParser() {
@@ -33,7 +36,7 @@ public class SentenceParser extends AbstractTextParser {
 
         TextComposite paragraph = new TextComposite(TextComponentType.PARAGRAPH);
 
-        List<String> sentences = splitIntoSentences(text);
+        List<String> sentences = extractSentences(text);
 
         for (String sentenceText : sentences) {
             String trimmed = sentenceText.trim();
@@ -59,59 +62,22 @@ public class SentenceParser extends AbstractTextParser {
         return paragraph;
     }
 
-    private List<String> splitIntoSentences(String text) {
+    private List<String> extractSentences(String text) {
         List<String> sentences = new ArrayList<>();
-        StringBuilder current = new StringBuilder();
+        Matcher matcher = SENTENCE_PATTERN.matcher(text);
 
-        for (int i = 0; i < text.length(); i++) {
-            char c = text.charAt(i);
-            current.append(c);
-
-            if (isSentenceEnd(c, text, i)) {
-                sentences.add(current.toString().trim());
-                current = new StringBuilder();
-
-                while (i + 1 < text.length() && Character.isWhitespace(text.charAt(i + 1))) {
-                    i++;
-                }
+        while (matcher.find()) {
+            String sentence = matcher.group().trim();
+            if (!sentence.isEmpty()) {
+                sentences.add(sentence);
             }
         }
 
-        if (!current.isEmpty()) {
-            sentences.add(current.toString().trim());
+        // If no sentences found, treat whole text as one sentence
+        if (sentences.isEmpty() && !text.trim().isEmpty()) {
+            sentences.add(text.trim());
         }
 
         return sentences;
-    }
-
-    private boolean isSentenceEnd(char c, String text, int index) {
-        if (c != '.' && c != '!' && c != '?') {
-            return false;
-        }
-
-        if (index + 1 >= text.length()) {
-            return true;
-        }
-
-        char next = text.charAt(index + 1);
-        if (Character.isWhitespace(next)) {
-            int nextNonSpace = index + 1;
-            while (nextNonSpace < text.length() && Character.isWhitespace(text.charAt(nextNonSpace))) {
-                nextNonSpace++;
-            }
-
-            if (nextNonSpace >= text.length()) {
-                return true;
-            }
-
-            char nextChar = text.charAt(nextNonSpace);
-            return Character.isUpperCase(nextChar) || isRussianUpperCase(nextChar);
-        }
-
-        return false;
-    }
-
-    private boolean isRussianUpperCase(char c) {
-        return c >= 'А' && c <= 'Я';
     }
 }

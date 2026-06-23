@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SentenceServiceTest {
+class SentenceServiceImplTest {
 
     private SentenceService sentenceService;
 

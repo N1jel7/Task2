@@ -8,11 +8,11 @@ import org.apache.logging.log4j.Logger;
 public abstract class AbstractTextParser implements TextParser {
     private static final Logger log = LogManager.getLogger(AbstractTextParser.class);
 
-    protected TextParser successor = DefaultTextParser.getInstance();
+    protected TextParser successor = DefaultTextParser.getHandleRequest();
 
     @Override
     public void setNext(TextParser next) {
-        this.successor = next != null ? next : DefaultTextParser.getInstance();
+        this.successor = next != null ? next : DefaultTextParser.getHandleRequest();
     }
 
     @Override
@@ -21,7 +21,7 @@ public abstract class AbstractTextParser implements TextParser {
     }
 
     @Override
-    public final TextComponent parse(String text) throws TextCustomException {
+    public final TextComponent chain(String text) throws TextCustomException {
         if (text == null) {
             throw new TextCustomException("Cannot parse null text");
         }
@@ -45,12 +45,12 @@ public abstract class AbstractTextParser implements TextParser {
         private DefaultTextParser() {
         }
 
-        public static DefaultTextParser getInstance() {
+        public static DefaultTextParser getHandleRequest() {
             return instance;
         }
 
         @Override
-        public TextComponent handleRequest(String text) throws TextCustomException {
+        public TextComponent handleRequest(String text) {
             log.debug("Default parser: no more processing for '{}'", text);
             return null;
         }

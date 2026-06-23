@@ -43,7 +43,7 @@ class ParserChainBuilderTest {
         String text = "Hello world! How are you?";
 
         // when
-        TextComponent result = parser.parse(text);
+        TextComponent result = parser.chain(text);
 
         // then
         assertAll(
@@ -61,7 +61,7 @@ class ParserChainBuilderTest {
                 "Second paragraph.";
 
         // when
-        TextComponent result = parser.parse(text);
+        TextComponent result = parser.chain(text);
 
         // then
         assertAll(

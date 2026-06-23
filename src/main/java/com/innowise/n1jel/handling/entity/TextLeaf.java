@@ -28,4 +28,29 @@ public class TextLeaf extends TextComponent{
     public String toString() {
         return content;
     }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
+
+        TextLeaf textLeaf = (TextLeaf) object;
+
+        if (type != textLeaf.type) {
+            return false;
+        }
+        return content != null ? content.equals(textLeaf.content) : textLeaf.content == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 1;
+        result = 31 * result + (content != null ? content.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        return result;
+    }
 }

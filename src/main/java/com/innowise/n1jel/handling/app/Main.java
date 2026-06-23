@@ -3,10 +3,7 @@ package com.innowise.n1jel.handling.app;
 import com.innowise.n1jel.handling.entity.TextComponent;
 import com.innowise.n1jel.handling.exception.TextCustomException;
 import com.innowise.n1jel.handling.parser.TextParser;
-import com.innowise.n1jel.handling.parser.impl.LexemeParser;
-import com.innowise.n1jel.handling.parser.impl.ParagraphParser;
-import com.innowise.n1jel.handling.parser.impl.SentenceParser;
-import com.innowise.n1jel.handling.parser.impl.WordParser;
+import com.innowise.n1jel.handling.parser.impl.*;
 import com.innowise.n1jel.handling.reader.TextFileReader;
 import com.innowise.n1jel.handling.reader.TextFileReaderImpl;
 import com.innowise.n1jel.handling.service.LetterService;
@@ -30,7 +27,7 @@ public class Main {
 
             // 1. Build parser chain
             log.info("Step 1: Building parser chain");
-            TextParser parser = buildParserChain();
+            TextParser parser = ParserChainBuilder.buildChain();
 
             // 2. Read file
             String filePath = "data/text.txt";
@@ -41,10 +38,10 @@ public class Main {
 
             // 3. Parse text
             log.info("Step 3: Parsing text");
-            TextComponent root = parser.parse(textContent);
+            TextComponent root = parser.chain(textContent);
             log.info("Text parsed successfully");
 
-            log.info("Parsed text: {}", root.toString());
+            log.info("Parsed text: {}", root.toString() );
 
             // 4. Count letters and symbols
             log.info("Step 4: Counting letters and symbols");
@@ -85,24 +82,5 @@ public class Main {
         } catch (Exception e) {
             log.error("Unexpected error", e);
         }
-    }
-
-    private static TextParser buildParserChain() {
-        TextParser wordParser = WordParser.getInstance();
-        TextParser lexemeParser = LexemeParser.getInstance();
-        TextParser sentenceParser = SentenceParser.getInstance();
-        TextParser paragraphParser = ParagraphParser.getInstance();
-
-        lexemeParser.setNext(wordParser);
-        sentenceParser.setNext(lexemeParser);
-        paragraphParser.setNext(sentenceParser);
-
-        log.info("Chain: {} -> {} -> {} -> {} -> Default",
-                paragraphParser.getClass().getSimpleName(),
-                sentenceParser.getClass().getSimpleName(),
-                lexemeParser.getClass().getSimpleName(),
-                wordParser.getClass().getSimpleName());
-
-        return paragraphParser;
     }
 }

@@ -8,8 +8,11 @@ import com.innowise.n1jel.handling.parser.AbstractTextParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.regex.Pattern;
+
 public class ParagraphParser extends AbstractTextParser {
     private static final Logger log = LogManager.getLogger(ParagraphParser.class);
+    private static final Pattern PARAGRAPH_PATTERN = Pattern.compile(PARAGRAPH_REGEX);
     private static ParagraphParser instance;
 
     private ParagraphParser() {
@@ -39,7 +42,6 @@ public class ParagraphParser extends AbstractTextParser {
 
                 TextComposite paragraph = new TextComposite(TextComponentType.PARAGRAPH);
 
-                // Pass trimmed text directly without normalization
                 TextComponent parsedParagraph = successor.handleRequest(trimmed);
 
                 if (parsedParagraph != null) {

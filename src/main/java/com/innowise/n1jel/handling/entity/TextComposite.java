@@ -52,12 +52,53 @@ public class TextComposite extends TextComponent {
         return result.toString();
     }
 
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
+
+        TextComposite that = (TextComposite) object;
+
+        if (type != that.type) {
+            return false;
+        }
+
+        if (components.size() != that.components.size()) {
+            return false;
+        }
+
+        for (int i = 0; i < components.size(); i++) {
+            TextComponent thisChild = components.get(i);
+            TextComponent thatChild = that.components.get(i);
+            if (!thisChild.equals(thatChild)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 1;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+
+        for (TextComponent component : components) {
+            result = 31 * result + (component != null ? component.hashCode() : 0);
+        }
+
+        return result;
+    }
+
     private String getSeparator() {
         return switch (type) {
-            case TEXT -> System.lineSeparator() + System.lineSeparator();
-            case PARAGRAPH -> System.lineSeparator();
+            case TEXT -> "\n";
+            case PARAGRAPH -> "\t";
             case SENTENCE -> " ";
-            case LEXEME -> "";
             default -> "";
         };
     }

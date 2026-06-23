@@ -8,8 +8,11 @@ import com.innowise.n1jel.handling.parser.AbstractTextParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.regex.Pattern;
+
 public class LexemeParser extends AbstractTextParser {
     private static final Logger log = LogManager.getLogger(LexemeParser.class);
+    private static final Pattern LEXEME_PATTERN = Pattern.compile(LEXEME_REGEX);
     private static LexemeParser instance;
 
     private LexemeParser() {

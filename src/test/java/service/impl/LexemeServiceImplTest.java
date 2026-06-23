@@ -1,6 +1,5 @@
 package service.impl;
 
-import com.innowise.n1jel.handling.entity.TextComponent;
 import com.innowise.n1jel.handling.entity.TextComposite;
 import com.innowise.n1jel.handling.entity.TextComponentType;
 import com.innowise.n1jel.handling.entity.TextLeaf;
@@ -12,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class LexemeServiceTest {
+class LexemeServiceImplTest {
 
     private LexemeService lexemeService;
 

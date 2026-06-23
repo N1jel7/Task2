@@ -9,8 +9,12 @@ import com.innowise.n1jel.handling.parser.AbstractTextParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.regex.Pattern;
+
 public class WordParser extends AbstractTextParser {
     private static final Logger log = LogManager.getLogger(WordParser.class);
+    private static final Pattern WORD_PATTERN = Pattern.compile(WORD_REGEX);
+    private static final Pattern PUNCTUATION_PATTERN = Pattern.compile(PUNCTUATION_REGEX);
     private static WordParser instance;
 
     private WordParser() {
