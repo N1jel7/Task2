@@ -47,8 +47,8 @@ public class LexemeServiceImpl implements LexemeService {
             return;
         }
 
-        TextComponent firstLexeme = lexemes.get(0);
-        TextComponent lastLexeme = lexemes.get(lexemes.size() - 1);
+        TextComponent firstLexeme = lexemes.getFirst();
+        TextComponent lastLexeme = lexemes.getLast();
 
         String firstContent = firstLexeme.toString();
         String lastContent = lastLexeme.toString();
@@ -58,11 +58,11 @@ public class LexemeServiceImpl implements LexemeService {
         // Remove and add in swapped order using indices
         try {
             // Remove last first (to avoid index shifting issues)
-            lexemes.remove(lexemes.size() - 1);
-            lexemes.remove(0);
+            lexemes.removeLast();
+            lexemes.removeFirst();
 
             // Add them back in swapped order
-            lexemes.add(0, lastLexeme);
+            lexemes.addFirst(lastLexeme);
             lexemes.add(firstLexeme);
         } catch (Exception e) {
             log.error("Failed to swap lexemes", e);
