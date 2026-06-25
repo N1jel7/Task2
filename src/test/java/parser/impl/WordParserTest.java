@@ -49,8 +49,8 @@ class WordParserTest {
         assertAll(
                 () -> assertNotNull(result, "Result should not be null"),
                 () -> assertEquals(TextComponentType.WORD, result.getType(), "Should be WORD type"),
-                () -> assertEquals("Hello", result.getContent(), "Content should be 'Hello'"),
-                () -> assertTrue(result.getChildren().isEmpty(), "Word should have no children")
+                () -> assertEquals("Hello", result.reconstruct(), "Content should be 'Hello'"),
+                () -> assertTrue(result.isLeaf(), "Word should be a leaf")
         );
     }
 
@@ -66,8 +66,8 @@ class WordParserTest {
         assertAll(
                 () -> assertNotNull(result, "Result should not be null"),
                 () -> assertEquals(TextComponentType.PUNCTUATION, result.getType(), "Should be PUNCTUATION type"),
-                () -> assertEquals("!", result.getContent(), "Content should be '!'"),
-                () -> assertTrue(result.getChildren().isEmpty(), "Punctuation should have no children")
+                () -> assertEquals("!", result.reconstruct(), "Content should be '!'"),
+                () -> assertTrue(result.isLeaf(), "Punctuation should be a leaf")
         );
     }
 
@@ -83,7 +83,8 @@ class WordParserTest {
         assertAll(
                 () -> assertNotNull(result, "Result should not be null"),
                 () -> assertEquals(TextComponentType.PUNCTUATION, result.getType(), "Should be PUNCTUATION type"),
-                () -> assertEquals("?!.", result.getContent(), "Content should be '?!.'")
+                () -> assertEquals("?!.", result.reconstruct(), "Content should be '?!.'"),
+                () -> assertTrue(result.isLeaf(), "Punctuation should be a leaf")
         );
     }
 
@@ -99,16 +100,17 @@ class WordParserTest {
         assertAll(
                 () -> assertNotNull(result, "Result should not be null"),
                 () -> assertEquals(TextComponentType.LEXEME, result.getType(), "Should be LEXEME type"),
+                () -> assertFalse(result.isLeaf(), "LEXEME should not be a leaf"),
                 () -> assertEquals(2, result.getChildren().size(), "Should have 2 children"),
                 () -> {
                     TextComponent firstChild = result.getChildren().getFirst();
                     assertEquals(TextComponentType.WORD, firstChild.getType(), "First child should be WORD");
-                    assertEquals("Hello", firstChild.getContent(), "First child content should be 'Hello'");
+                    assertEquals("Hello", firstChild.reconstruct(), "First child content should be 'Hello'");
                 },
                 () -> {
                     TextComponent secondChild = result.getChildren().get(1);
                     assertEquals(TextComponentType.PUNCTUATION, secondChild.getType(), "Second child should be PUNCTUATION");
-                    assertEquals("!", secondChild.getContent(), "Second child content should be '!'");
+                    assertEquals("!", secondChild.reconstruct(), "Second child content should be '!'");
                 }
         );
     }
@@ -125,16 +127,17 @@ class WordParserTest {
         assertAll(
                 () -> assertNotNull(result, "Result should not be null"),
                 () -> assertEquals(TextComponentType.LEXEME, result.getType(), "Should be LEXEME type"),
+                () -> assertFalse(result.isLeaf(), "LEXEME should not be a leaf"),
                 () -> assertEquals(2, result.getChildren().size(), "Should have 2 children"),
                 () -> {
                     TextComponent firstChild = result.getChildren().getFirst();
                     assertEquals(TextComponentType.PUNCTUATION, firstChild.getType(), "First child should be PUNCTUATION");
-                    assertEquals("\"", firstChild.getContent(), "First child content should be '\"'");
+                    assertEquals("\"", firstChild.reconstruct(), "First child content should be '\"'");
                 },
                 () -> {
                     TextComponent secondChild = result.getChildren().get(1);
                     assertEquals(TextComponentType.WORD, secondChild.getType(), "Second child should be WORD");
-                    assertEquals("Hello", secondChild.getContent(), "Second child content should be 'Hello'");
+                    assertEquals("Hello", secondChild.reconstruct(), "Second child content should be 'Hello'");
                 }
         );
     }
@@ -151,16 +154,17 @@ class WordParserTest {
         assertAll(
                 () -> assertNotNull(result, "Result should not be null"),
                 () -> assertEquals(TextComponentType.LEXEME, result.getType(), "Should be LEXEME type"),
+                () -> assertFalse(result.isLeaf(), "LEXEME should not be a leaf"),
                 () -> assertEquals(2, result.getChildren().size(), "Should have 2 children"),
                 () -> {
                     TextComponent firstChild = result.getChildren().getFirst();
                     assertEquals(TextComponentType.WORD, firstChild.getType(), "First child should be WORD");
-                    assertEquals("Hello", firstChild.getContent(), "First child content should be 'Hello'");
+                    assertEquals("Hello", firstChild.reconstruct(), "First child content should be 'Hello'");
                 },
                 () -> {
                     TextComponent secondChild = result.getChildren().get(1);
                     assertEquals(TextComponentType.PUNCTUATION, secondChild.getType(), "Second child should be PUNCTUATION");
-                    assertEquals("?!", secondChild.getContent(), "Second child content should be '?!'");
+                    assertEquals("?!", secondChild.reconstruct(), "Second child content should be '?!'");
                 }
         );
     }
@@ -177,21 +181,22 @@ class WordParserTest {
         assertAll(
                 () -> assertNotNull(result, "Result should not be null"),
                 () -> assertEquals(TextComponentType.LEXEME, result.getType(), "Should be LEXEME type"),
+                () -> assertFalse(result.isLeaf(), "LEXEME should not be a leaf"),
                 () -> assertEquals(3, result.getChildren().size(), "Should have 3 children"),
                 () -> {
                     TextComponent firstChild = result.getChildren().getFirst();
                     assertEquals(TextComponentType.WORD, firstChild.getType(), "First child should be WORD");
-                    assertEquals("Hello", firstChild.getContent(), "First child content should be 'Hello'");
+                    assertEquals("Hello", firstChild.reconstruct(), "First child content should be 'Hello'");
                 },
                 () -> {
                     TextComponent secondChild = result.getChildren().get(1);
                     assertEquals(TextComponentType.PUNCTUATION, secondChild.getType(), "Second child should be PUNCTUATION");
-                    assertEquals(",", secondChild.getContent(), "Second child content should be ','");
+                    assertEquals(",", secondChild.reconstruct(), "Second child content should be ','");
                 },
                 () -> {
                     TextComponent thirdChild = result.getChildren().get(2);
                     assertEquals(TextComponentType.WORD, thirdChild.getType(), "Third child should be WORD");
-                    assertEquals("world", thirdChild.getContent(), "Third child content should be 'world'");
+                    assertEquals("world", thirdChild.reconstruct(), "Third child content should be 'world'");
                 }
         );
     }
@@ -208,12 +213,13 @@ class WordParserTest {
         assertAll(
                 () -> assertNotNull(result, "Result should not be null"),
                 () -> assertEquals(TextComponentType.WORD, result.getType(), "Should be WORD type"),
-                () -> assertEquals("WORLD", result.getContent(), "Content should preserve case")
+                () -> assertEquals("WORLD", result.reconstruct(), "Content should preserve case"),
+                () -> assertTrue(result.isLeaf(), "Word should be a leaf")
         );
     }
 
     @Test
-    void handleRequest_ShouldReturnLexemeWithSingleChild_WhenMixedButOnlyOnePart() throws TextCustomException {
+    void handleRequest_ShouldReturnLexemeWithChildren_WhenMixedButOnlyOnePart() throws TextCustomException {
         // given
         String text = "Hello,";
 
@@ -224,16 +230,17 @@ class WordParserTest {
         assertAll(
                 () -> assertNotNull(result, "Result should not be null"),
                 () -> assertEquals(TextComponentType.LEXEME, result.getType(), "Should be LEXEME type"),
+                () -> assertFalse(result.isLeaf(), "LEXEME should not be a leaf"),
                 () -> assertEquals(2, result.getChildren().size(), "Should have 2 children"),
                 () -> {
                     TextComponent firstChild = result.getChildren().getFirst();
                     assertEquals(TextComponentType.WORD, firstChild.getType(), "First child should be WORD");
-                    assertEquals("Hello", firstChild.getContent(), "First child content should be 'Hello'");
+                    assertEquals("Hello", firstChild.reconstruct(), "First child content should be 'Hello'");
                 },
                 () -> {
                     TextComponent secondChild = result.getChildren().get(1);
                     assertEquals(TextComponentType.PUNCTUATION, secondChild.getType(), "Second child should be PUNCTUATION");
-                    assertEquals(",", secondChild.getContent(), "Second child content should be ','");
+                    assertEquals(",", secondChild.reconstruct(), "Second child content should be ','");
                 }
         );
     }

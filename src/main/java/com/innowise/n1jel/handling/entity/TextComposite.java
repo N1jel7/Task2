@@ -1,37 +1,35 @@
 package com.innowise.n1jel.handling.entity;
 
-import com.innowise.n1jel.handling.exception.TextCustomException;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class TextComposite extends TextComponent {
 
-    private final TextComponentType type;
     private final List<TextComponent> components;
 
     public TextComposite(TextComponentType type) {
-        this.type = type;
+        super(type);
         this.components = new ArrayList<>();
     }
 
     @Override
-    public TextComponentType getType() {
-        return type;
+    public boolean isLeaf() {
+        return false;
     }
 
     @Override
-    public boolean add(TextComponent component) throws TextCustomException {
+    public boolean add(TextComponent component) {
         if (component == null) {
-            throw new TextCustomException("Cannot add null component");
+            return false;
         }
-
         return components.add(component);
-
     }
 
     @Override
     public boolean remove(TextComponent component) {
+        if (component == null) {
+            return false;
+        }
         return components.remove(component);
     }
 
@@ -41,12 +39,17 @@ public class TextComposite extends TextComponent {
     }
 
     @Override
-    public String toString() {
+    public String reconstruct() {
         StringBuilder result = new StringBuilder();
-        String separator = getSeparator();
+        String separator = switch (getType()) {
+            case TEXT -> "\n\n";
+            case PARAGRAPH -> "\t";
+            case SENTENCE -> " ";
+            default -> "";
+        };
 
         for (int i = 0; i < components.size(); i++) {
-            result.append(components.get(i));
+            result.append(components.get(i).reconstruct());
             if (i < components.size() - 1) {
                 result.append(separator);
             }
@@ -56,53 +59,25 @@ public class TextComposite extends TextComponent {
     }
 
     @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        components.forEach(result::append);
+        return result.toString();
+    }
+
+    @Override
     public boolean equals(Object object) {
-        if (this == object) {
-            return true;
-        }
-        if (object == null || getClass() != object.getClass()) {
-            return false;
-        }
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
 
         TextComposite that = (TextComposite) object;
-
-        if (type != that.type) {
-            return false;
-        }
-
-        if (components.size() != that.components.size()) {
-            return false;
-        }
-
-        for (int i = 0; i < components.size(); i++) {
-            TextComponent thisChild = components.get(i);
-            TextComponent thatChild = that.components.get(i);
-            if (!thisChild.equals(thatChild)) {
-                return false;
-            }
-        }
-
-        return true;
+        return getType() == that.getType() && components.equals(that.components);
     }
 
     @Override
     public int hashCode() {
-        int result = 1;
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-
-        for (TextComponent component : components) {
-            result = 31 * result + (component != null ? component.hashCode() : 0);
-        }
-
+        int result = getType().hashCode();
+        result = 31 * result + components.hashCode();
         return result;
-    }
-
-    private String getSeparator() {
-        return switch (type) {
-            case TEXT -> "\n";
-            case PARAGRAPH -> "\t";
-            case SENTENCE -> " ";
-            default -> "";
-        };
     }
 }

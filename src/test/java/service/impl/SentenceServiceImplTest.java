@@ -3,7 +3,7 @@ package service.impl;
 import com.innowise.n1jel.handling.entity.TextComponent;
 import com.innowise.n1jel.handling.entity.TextComposite;
 import com.innowise.n1jel.handling.entity.TextComponentType;
-import com.innowise.n1jel.handling.entity.TextLeaf;
+import com.innowise.n1jel.handling.entity.SymbolLeaf;
 import com.innowise.n1jel.handling.exception.TextCustomException;
 import com.innowise.n1jel.handling.service.SentenceService;
 import com.innowise.n1jel.handling.service.impl.SentenceServiceImpl;
@@ -52,11 +52,11 @@ class SentenceServiceImplTest {
         TextComposite sentence = new TextComposite(TextComponentType.SENTENCE);
 
         TextComposite lexeme1 = new TextComposite(TextComponentType.LEXEME);
-        lexeme1.add(new TextLeaf("Hello", TextComponentType.WORD));
+        lexeme1.add(new SymbolLeaf("Hello", TextComponentType.WORD));
         sentence.add(lexeme1);
 
         TextComposite lexeme2 = new TextComposite(TextComponentType.LEXEME);
-        lexeme2.add(new TextLeaf("world", TextComponentType.WORD));
+        lexeme2.add(new SymbolLeaf("world", TextComponentType.WORD));
         sentence.add(lexeme2);
 
         paragraph.add(sentence);
@@ -78,30 +78,30 @@ class SentenceServiceImplTest {
         // Sentence 1: "Hello world"
         TextComposite sentence1 = new TextComposite(TextComponentType.SENTENCE);
         TextComposite lexeme1 = new TextComposite(TextComponentType.LEXEME);
-        lexeme1.add(new TextLeaf("Hello", TextComponentType.WORD));
+        lexeme1.add(new SymbolLeaf("Hello", TextComponentType.WORD));
         sentence1.add(lexeme1);
         TextComposite lexeme2 = new TextComposite(TextComponentType.LEXEME);
-        lexeme2.add(new TextLeaf("world", TextComponentType.WORD));
+        lexeme2.add(new SymbolLeaf("world", TextComponentType.WORD));
         sentence1.add(lexeme2);
         paragraph.add(sentence1);
 
         // Sentence 2: "world Hello"
         TextComposite sentence2 = new TextComposite(TextComponentType.SENTENCE);
         TextComposite lexeme3 = new TextComposite(TextComponentType.LEXEME);
-        lexeme3.add(new TextLeaf("world", TextComponentType.WORD));
+        lexeme3.add(new SymbolLeaf("world", TextComponentType.WORD));
         sentence2.add(lexeme3);
         TextComposite lexeme4 = new TextComposite(TextComponentType.LEXEME);
-        lexeme4.add(new TextLeaf("Hello", TextComponentType.WORD));
+        lexeme4.add(new SymbolLeaf("Hello", TextComponentType.WORD));
         sentence2.add(lexeme4);
         paragraph.add(sentence2);
 
         // Sentence 3: "Hello java"
         TextComposite sentence3 = new TextComposite(TextComponentType.SENTENCE);
         TextComposite lexeme5 = new TextComposite(TextComponentType.LEXEME);
-        lexeme5.add(new TextLeaf("Hello", TextComponentType.WORD));
+        lexeme5.add(new SymbolLeaf("Hello", TextComponentType.WORD));
         sentence3.add(lexeme5);
         TextComposite lexeme6 = new TextComposite(TextComponentType.LEXEME);
-        lexeme6.add(new TextLeaf("java", TextComponentType.WORD));
+        lexeme6.add(new SymbolLeaf("java", TextComponentType.WORD));
         sentence3.add(lexeme6);
         paragraph.add(sentence3);
 
@@ -123,21 +123,21 @@ class SentenceServiceImplTest {
         // Sentence 1: "Hello world!"
         TextComposite sentence1 = new TextComposite(TextComponentType.SENTENCE);
         TextComposite lexeme1 = new TextComposite(TextComponentType.LEXEME);
-        lexeme1.add(new TextLeaf("Hello", TextComponentType.WORD));
+        lexeme1.add(new SymbolLeaf("Hello", TextComponentType.WORD));
         sentence1.add(lexeme1);
         TextComposite lexeme2 = new TextComposite(TextComponentType.LEXEME);
-        lexeme2.add(new TextLeaf("world", TextComponentType.WORD));
-        lexeme2.add(new TextLeaf("!", TextComponentType.PUNCTUATION));
+        lexeme2.add(new SymbolLeaf("world", TextComponentType.WORD));
+        lexeme2.add(new SymbolLeaf("!", TextComponentType.PUNCTUATION));
         sentence1.add(lexeme2);
         paragraph.add(sentence1);
 
         // Sentence 2: "world Hello"
         TextComposite sentence2 = new TextComposite(TextComponentType.SENTENCE);
         TextComposite lexeme3 = new TextComposite(TextComponentType.LEXEME);
-        lexeme3.add(new TextLeaf("world", TextComponentType.WORD));
+        lexeme3.add(new SymbolLeaf("world", TextComponentType.WORD));
         sentence2.add(lexeme3);
         TextComposite lexeme4 = new TextComposite(TextComponentType.LEXEME);
-        lexeme4.add(new TextLeaf("Hello", TextComponentType.WORD));
+        lexeme4.add(new SymbolLeaf("Hello", TextComponentType.WORD));
         sentence2.add(lexeme4);
         paragraph.add(sentence2);
 
@@ -185,21 +185,21 @@ class SentenceServiceImplTest {
         // Sentence 1: "Hello" - 1 letter 'e'
         TextComposite sentence1 = new TextComposite(TextComponentType.SENTENCE);
         TextComposite lexeme1 = new TextComposite(TextComponentType.LEXEME);
-        lexeme1.add(new TextLeaf("Hello", TextComponentType.WORD));
+        lexeme1.add(new SymbolLeaf("Hello", TextComponentType.WORD));
         sentence1.add(lexeme1);
         paragraph.add(sentence1);
 
         // Sentence 2: "Bye" - 1 letter 'e'
         TextComposite sentence2 = new TextComposite(TextComponentType.SENTENCE);
         TextComposite lexeme2 = new TextComposite(TextComponentType.LEXEME);
-        lexeme2.add(new TextLeaf("Bye", TextComponentType.WORD));
+        lexeme2.add(new SymbolLeaf("Bye", TextComponentType.WORD));
         sentence2.add(lexeme2);
         paragraph.add(sentence2);
 
         // Sentence 3: "I" - 0 letters 'e'
         TextComposite sentence3 = new TextComposite(TextComponentType.SENTENCE);
         TextComposite lexeme3 = new TextComposite(TextComponentType.LEXEME);
-        lexeme3.add(new TextLeaf("I", TextComponentType.WORD));
+        lexeme3.add(new SymbolLeaf("I", TextComponentType.WORD));
         sentence3.add(lexeme3);
         paragraph.add(sentence3);
 
@@ -234,14 +234,14 @@ class SentenceServiceImplTest {
         // Sentence 1: "Hello" - 1 letter 'e'
         TextComposite sentence1 = new TextComposite(TextComponentType.SENTENCE);
         TextComposite lexeme1 = new TextComposite(TextComponentType.LEXEME);
-        lexeme1.add(new TextLeaf("Hello", TextComponentType.WORD));
+        lexeme1.add(new SymbolLeaf("Hello", TextComponentType.WORD));
         sentence1.add(lexeme1);
         paragraph.add(sentence1);
 
         // Sentence 2: "I" - 0 letters 'e'
         TextComposite sentence2 = new TextComposite(TextComponentType.SENTENCE);
         TextComposite lexeme2 = new TextComposite(TextComponentType.LEXEME);
-        lexeme2.add(new TextLeaf("I", TextComponentType.WORD));
+        lexeme2.add(new SymbolLeaf("I", TextComponentType.WORD));
         sentence2.add(lexeme2);
         paragraph.add(sentence2);
 
@@ -267,18 +267,18 @@ class SentenceServiceImplTest {
         // Sentence 1: "Hello world!" - 1 letter 'e' (only in Hello)
         TextComposite sentence1 = new TextComposite(TextComponentType.SENTENCE);
         TextComposite lexeme1 = new TextComposite(TextComponentType.LEXEME);
-        lexeme1.add(new TextLeaf("Hello", TextComponentType.WORD));
+        lexeme1.add(new SymbolLeaf("Hello", TextComponentType.WORD));
         sentence1.add(lexeme1);
         TextComposite lexeme2 = new TextComposite(TextComponentType.LEXEME);
-        lexeme2.add(new TextLeaf("world", TextComponentType.WORD));
-        lexeme2.add(new TextLeaf("!", TextComponentType.PUNCTUATION));
+        lexeme2.add(new SymbolLeaf("world", TextComponentType.WORD));
+        lexeme2.add(new SymbolLeaf("!", TextComponentType.PUNCTUATION));
         sentence1.add(lexeme2);
         paragraph.add(sentence1);
 
         // Sentence 2: "Bye" - 1 letter 'e'
         TextComposite sentence2 = new TextComposite(TextComponentType.SENTENCE);
         TextComposite lexeme3 = new TextComposite(TextComponentType.LEXEME);
-        lexeme3.add(new TextLeaf("Bye", TextComponentType.WORD));
+        lexeme3.add(new SymbolLeaf("Bye", TextComponentType.WORD));
         sentence2.add(lexeme3);
         paragraph.add(sentence2);
 
@@ -311,14 +311,14 @@ class SentenceServiceImplTest {
         // Sentence 1: "Hello" - 1 letter 'e'
         TextComposite sentence1 = new TextComposite(TextComponentType.SENTENCE);
         TextComposite lexeme1 = new TextComposite(TextComponentType.LEXEME);
-        lexeme1.add(new TextLeaf("Hello", TextComponentType.WORD));
+        lexeme1.add(new SymbolLeaf("Hello", TextComponentType.WORD));
         sentence1.add(lexeme1);
         paragraph.add(sentence1);
 
         // Sentence 2: "Bye" - 1 letter 'e'
         TextComposite sentence2 = new TextComposite(TextComponentType.SENTENCE);
         TextComposite lexeme2 = new TextComposite(TextComponentType.LEXEME);
-        lexeme2.add(new TextLeaf("Bye", TextComponentType.WORD));
+        lexeme2.add(new SymbolLeaf("Bye", TextComponentType.WORD));
         sentence2.add(lexeme2);
         paragraph.add(sentence2);
 

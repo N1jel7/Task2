@@ -57,7 +57,7 @@ class LexemeParserTest {
                     TextComponent firstLexeme = result.getChildren().getFirst();
                     assertEquals(TextComponentType.LEXEME, firstLexeme.getType(), "First child should be LEXEME");
                     assertFalse(firstLexeme.getChildren().isEmpty(), "First lexeme should have children");
-                    assertEquals("Hello", firstLexeme.getChildren().getFirst().getContent(), "First word should be 'Hello'");
+                    assertEquals("Hello", firstLexeme.getChildren().getFirst().reconstruct(), "First word should be 'Hello'");
                 }
         );
     }
@@ -78,7 +78,7 @@ class LexemeParserTest {
                 () -> {
                     TextComponent lexeme = result.getChildren().getFirst();
                     assertEquals(TextComponentType.LEXEME, lexeme.getType(), "Child should be LEXEME");
-                    assertEquals("Hello", lexeme.getChildren().getFirst().getContent(), "Word content should be 'Hello'");
+                    assertEquals("Hello", lexeme.getChildren().getFirst().reconstruct(), "Word content should be 'Hello'");
                 }
         );
     }
@@ -128,7 +128,7 @@ class LexemeParserTest {
                 () -> assertNotNull(result, "Result should not be null"),
                 () -> {
                     TextComponent firstLexeme = result.getChildren().getFirst();
-                    assertEquals("Hello", firstLexeme.getChildren().getFirst().getContent(), "First word should preserve case");
+                    assertEquals("Hello", firstLexeme.getChildren().getFirst().reconstruct(), "First word should preserve case");
                 }
         );
     }

@@ -11,7 +11,7 @@ import java.util.*;
 public class SentenceServiceImpl implements SentenceService {
     private static final Logger log = LogManager.getLogger(SentenceServiceImpl.class);
 
-    private static final String WORD_REGEX = "^\\p{L}+$";
+    private static final String WORD_PATTERN = "^\\p{L}+$";
 
     @Override
     public int findMaxSentencesWithCommonWord(TextComponent root) {
@@ -73,7 +73,7 @@ public class SentenceServiceImpl implements SentenceService {
 
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < sorted.size(); i++) {
-            result.append(sorted.get(i).toString());
+            result.append(sorted.get(i).reconstruct());
             if (i < sorted.size() - 1) {
                 result.append(" ");
             }
@@ -90,16 +90,17 @@ public class SentenceServiceImpl implements SentenceService {
     }
 
     private void collectSentencesRecursive(TextComponent component, List<TextComponent> result) {
-        if (component == null) {
+        if (component == null || component.isLeaf()) {
             return;
         }
 
         if (component.getType() == TextComponentType.SENTENCE) {
             result.add(component);
-        } else {
-            for (TextComponent child : component.getChildren()) {
-                collectSentencesRecursive(child, result);
-            }
+            return;
+        }
+
+        for (TextComponent child : component.getChildren()) {
+            collectSentencesRecursive(child, result);
         }
     }
 
@@ -107,17 +108,17 @@ public class SentenceServiceImpl implements SentenceService {
         Set<String> words = new HashSet<>();
 
         for (TextComponent lexeme : sentence.getChildren()) {
-            String content = lexeme.getContent();
+            String content = lexeme.reconstruct();
 
             // Check if it's a word (only letters)
-            if (content.matches(WORD_REGEX)) {
+            if (content.matches(WORD_PATTERN)) {
                 words.add(content.toLowerCase());
             }
 
             // If lexeme has children (word + punctuation), extract words from children
             for (TextComponent child : lexeme.getChildren()) {
                 if (child.getType() == TextComponentType.WORD) {
-                    words.add(child.getContent().toLowerCase());
+                    words.add(child.reconstruct().toLowerCase());
                 }
             }
         }
@@ -127,7 +128,7 @@ public class SentenceServiceImpl implements SentenceService {
 
     private int countLetterInSentence(TextComponent sentence, char letter) {
         int count = 0;
-        String content = sentence.toString();
+        String content = sentence.reconstruct();
         for (char c : content.toCharArray()) {
             if (Character.toLowerCase(c) == letter) {
                 count++;

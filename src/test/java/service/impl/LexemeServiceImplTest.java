@@ -2,7 +2,7 @@ package service.impl;
 
 import com.innowise.n1jel.handling.entity.TextComposite;
 import com.innowise.n1jel.handling.entity.TextComponentType;
-import com.innowise.n1jel.handling.entity.TextLeaf;
+import com.innowise.n1jel.handling.entity.SymbolLeaf;
 import com.innowise.n1jel.handling.exception.TextCustomException;
 import com.innowise.n1jel.handling.service.LexemeService;
 import com.innowise.n1jel.handling.service.impl.LexemeServiceImpl;
@@ -21,12 +21,22 @@ class LexemeServiceImplTest {
     }
 
     @Test
-    void swapFirstAndLastLexemes_ShouldReturnEmptyString_WhenRootIsNull() {
-        // when
-        String result = lexemeService.swapFirstAndLastLexemes(null);
+    void swapFirstAndLastLexemes_ShouldThrowException_WhenRootIsNull() {
+        // when & then
+        assertThrows(TextCustomException.class,
+                () -> lexemeService.swapFirstAndLastLexemes(null),
+                "Should throw exception for null root");
+    }
 
-        // then
-        assertEquals("", result, "Should return empty string for null root");
+    @Test
+    void swapFirstAndLastLexemes_ShouldThrowException_WhenRootIsLeaf() throws TextCustomException {
+        // given
+        SymbolLeaf leaf = new SymbolLeaf("Hello", TextComponentType.WORD);
+
+        // when & then
+        assertThrows(TextCustomException.class,
+                () -> lexemeService.swapFirstAndLastLexemes(leaf),
+                "Should throw exception for leaf root");
     }
 
     @Test
@@ -36,12 +46,12 @@ class LexemeServiceImplTest {
         TextComposite paragraph = new TextComposite(TextComponentType.PARAGRAPH);
         TextComposite sentence = new TextComposite(TextComponentType.SENTENCE);
         TextComposite lexeme = new TextComposite(TextComponentType.LEXEME);
-        lexeme.add(new TextLeaf("Hello", TextComponentType.WORD));
+        lexeme.add(new SymbolLeaf("Hello", TextComponentType.WORD));
         sentence.add(lexeme);
         paragraph.add(sentence);
         text.add(paragraph);
 
-        String expected = text.toString();
+        String expected = text.reconstruct();
 
         // when
         String result = lexemeService.swapFirstAndLastLexemes(text);
@@ -58,11 +68,11 @@ class LexemeServiceImplTest {
         TextComposite sentence = new TextComposite(TextComponentType.SENTENCE);
 
         TextComposite lexeme1 = new TextComposite(TextComponentType.LEXEME);
-        lexeme1.add(new TextLeaf("Hello", TextComponentType.WORD));
+        lexeme1.add(new SymbolLeaf("Hello", TextComponentType.WORD));
         sentence.add(lexeme1);
 
         TextComposite lexeme2 = new TextComposite(TextComponentType.LEXEME);
-        lexeme2.add(new TextLeaf("world", TextComponentType.WORD));
+        lexeme2.add(new SymbolLeaf("world", TextComponentType.WORD));
         sentence.add(lexeme2);
 
         paragraph.add(sentence);
@@ -87,15 +97,15 @@ class LexemeServiceImplTest {
         TextComposite sentence = new TextComposite(TextComponentType.SENTENCE);
 
         TextComposite lexeme1 = new TextComposite(TextComponentType.LEXEME);
-        lexeme1.add(new TextLeaf("Hello", TextComponentType.WORD));
+        lexeme1.add(new SymbolLeaf("Hello", TextComponentType.WORD));
         sentence.add(lexeme1);
 
         TextComposite lexeme2 = new TextComposite(TextComponentType.LEXEME);
-        lexeme2.add(new TextLeaf("beautiful", TextComponentType.WORD));
+        lexeme2.add(new SymbolLeaf("beautiful", TextComponentType.WORD));
         sentence.add(lexeme2);
 
         TextComposite lexeme3 = new TextComposite(TextComponentType.LEXEME);
-        lexeme3.add(new TextLeaf("world", TextComponentType.WORD));
+        lexeme3.add(new SymbolLeaf("world", TextComponentType.WORD));
         sentence.add(lexeme3);
 
         paragraph.add(sentence);
@@ -120,18 +130,18 @@ class LexemeServiceImplTest {
         TextComposite sentence = new TextComposite(TextComponentType.SENTENCE);
 
         TextComposite lexeme1 = new TextComposite(TextComponentType.LEXEME);
-        lexeme1.add(new TextLeaf("Hello", TextComponentType.WORD));
+        lexeme1.add(new SymbolLeaf("Hello", TextComponentType.WORD));
         sentence.add(lexeme1);
 
         TextComposite lexeme2 = new TextComposite(TextComponentType.LEXEME);
-        lexeme2.add(new TextLeaf("world", TextComponentType.WORD));
-        lexeme2.add(new TextLeaf("!", TextComponentType.PUNCTUATION));
+        lexeme2.add(new SymbolLeaf("world", TextComponentType.WORD));
+        lexeme2.add(new SymbolLeaf("!", TextComponentType.PUNCTUATION));
         sentence.add(lexeme2);
 
         paragraph.add(sentence);
         text.add(paragraph);
 
-        String original = text.toString();
+        String original = text.reconstruct();
 
         // when
         String result = lexemeService.swapFirstAndLastLexemes(text);
@@ -154,23 +164,23 @@ class LexemeServiceImplTest {
         // Sentence 1: "Hello world"
         TextComposite sentence1 = new TextComposite(TextComponentType.SENTENCE);
         TextComposite lexeme1 = new TextComposite(TextComponentType.LEXEME);
-        lexeme1.add(new TextLeaf("Hello", TextComponentType.WORD));
+        lexeme1.add(new SymbolLeaf("Hello", TextComponentType.WORD));
         sentence1.add(lexeme1);
         TextComposite lexeme2 = new TextComposite(TextComponentType.LEXEME);
-        lexeme2.add(new TextLeaf("world", TextComponentType.WORD));
+        lexeme2.add(new SymbolLeaf("world", TextComponentType.WORD));
         sentence1.add(lexeme2);
         paragraph.add(sentence1);
 
         // Sentence 2: "How are you"
         TextComposite sentence2 = new TextComposite(TextComponentType.SENTENCE);
         TextComposite lexeme3 = new TextComposite(TextComponentType.LEXEME);
-        lexeme3.add(new TextLeaf("How", TextComponentType.WORD));
+        lexeme3.add(new SymbolLeaf("How", TextComponentType.WORD));
         sentence2.add(lexeme3);
         TextComposite lexeme4 = new TextComposite(TextComponentType.LEXEME);
-        lexeme4.add(new TextLeaf("are", TextComponentType.WORD));
+        lexeme4.add(new SymbolLeaf("are", TextComponentType.WORD));
         sentence2.add(lexeme4);
         TextComposite lexeme5 = new TextComposite(TextComponentType.LEXEME);
-        lexeme5.add(new TextLeaf("you", TextComponentType.WORD));
+        lexeme5.add(new SymbolLeaf("you", TextComponentType.WORD));
         sentence2.add(lexeme5);
         paragraph.add(sentence2);
 
@@ -194,10 +204,9 @@ class LexemeServiceImplTest {
         // given
         TextComposite text = new TextComposite(TextComponentType.TEXT);
         TextComposite paragraph = new TextComposite(TextComponentType.PARAGRAPH);
-        // Paragraph without sentences
         text.add(paragraph);
 
-        String expected = text.toString();
+        String expected = text.reconstruct();
 
         // when
         String result = lexemeService.swapFirstAndLastLexemes(text);
@@ -214,16 +223,16 @@ class LexemeServiceImplTest {
         TextComposite sentence = new TextComposite(TextComponentType.SENTENCE);
 
         TextComposite lexeme1 = new TextComposite(TextComponentType.LEXEME);
-        lexeme1.add(new TextLeaf("Hello", TextComponentType.WORD));
+        lexeme1.add(new SymbolLeaf("Hello", TextComponentType.WORD));
         sentence.add(lexeme1);
 
         TextComposite lexeme2 = new TextComposite(TextComponentType.LEXEME);
-        lexeme2.add(new TextLeaf("beautiful", TextComponentType.WORD));
+        lexeme2.add(new SymbolLeaf("beautiful", TextComponentType.WORD));
         sentence.add(lexeme2);
 
         TextComposite lexeme3 = new TextComposite(TextComponentType.LEXEME);
-        lexeme3.add(new TextLeaf("world", TextComponentType.WORD));
-        lexeme3.add(new TextLeaf("!", TextComponentType.PUNCTUATION));
+        lexeme3.add(new SymbolLeaf("world", TextComponentType.WORD));
+        lexeme3.add(new SymbolLeaf("!", TextComponentType.PUNCTUATION));
         sentence.add(lexeme3);
 
         paragraph.add(sentence);

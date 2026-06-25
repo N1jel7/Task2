@@ -1,7 +1,7 @@
 package com.innowise.n1jel.handling.parser.impl;
 
 import com.innowise.n1jel.handling.entity.TextComponent;
-import com.innowise.n1jel.handling.entity.TextLeaf;
+import com.innowise.n1jel.handling.entity.SymbolLeaf;
 import com.innowise.n1jel.handling.entity.TextComposite;
 import com.innowise.n1jel.handling.entity.TextComponentType;
 import com.innowise.n1jel.handling.exception.TextCustomException;
@@ -35,12 +35,12 @@ public class WordParser extends AbstractTextParser {
 
         // Pure word
         if (WORD_PATTERN.matcher(text).matches()) {
-            return new TextLeaf(text, TextComponentType.WORD);
+            return new SymbolLeaf(text, TextComponentType.WORD);
         }
 
         // Pure punctuation
         if (PUNCTUATION_PATTERN.matcher(text).matches()) {
-            return new TextLeaf(text, TextComponentType.PUNCTUATION);
+            return new SymbolLeaf(text, TextComponentType.PUNCTUATION);
         }
 
         // Mixed - split into word and punctuation
@@ -52,29 +52,25 @@ public class WordParser extends AbstractTextParser {
         StringBuilder current = new StringBuilder();
         boolean isWord = Character.isLetter(text.charAt(0));
 
-        try {
-            for (char c : text.toCharArray()) {
-                boolean currentIsLetter = Character.isLetter(c);
+        for (char c : text.toCharArray()) {
+            boolean currentIsLetter = Character.isLetter(c);
 
-                if (currentIsLetter == isWord) {
-                    current.append(c);
-                } else {
-                    if (!current.isEmpty()) {
-                        TextComponentType type = isWord ? TextComponentType.WORD : TextComponentType.PUNCTUATION;
-                        lexeme.add(new TextLeaf(current.toString(), type));
-                    }
-                    current = new StringBuilder();
-                    current.append(c);
-                    isWord = currentIsLetter;
+            if (currentIsLetter == isWord) {
+                current.append(c);
+            } else {
+                if (!current.isEmpty()) {
+                    TextComponentType type = isWord ? TextComponentType.WORD : TextComponentType.PUNCTUATION;
+                    lexeme.add(new SymbolLeaf(current.toString(), type));
                 }
+                current = new StringBuilder();
+                current.append(c);
+                isWord = currentIsLetter;
             }
+        }
 
-            if (!current.isEmpty()) {
-                TextComponentType type = isWord ? TextComponentType.WORD : TextComponentType.PUNCTUATION;
-                lexeme.add(new TextLeaf(current.toString(), type));
-            }
-        } catch (TextCustomException e) {
-            log.error("Failed to split mixed lexeme", e);
+        if (!current.isEmpty()) {
+            TextComponentType type = isWord ? TextComponentType.WORD : TextComponentType.PUNCTUATION;
+            lexeme.add(new SymbolLeaf(current.toString(), type));
         }
 
         if (lexeme.getChildren().size() == 1) {

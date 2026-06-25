@@ -3,7 +3,7 @@ package service.impl;
 import com.innowise.n1jel.handling.entity.TextComponent;
 import com.innowise.n1jel.handling.entity.TextComponentType;
 import com.innowise.n1jel.handling.entity.TextComposite;
-import com.innowise.n1jel.handling.entity.TextLeaf;
+import com.innowise.n1jel.handling.entity.SymbolLeaf;
 import com.innowise.n1jel.handling.exception.TextCustomException;
 import com.innowise.n1jel.handling.service.LetterService;
 import com.innowise.n1jel.handling.service.impl.LetterServiceImpl;
@@ -46,7 +46,7 @@ class LetterServiceImplTest {
         TextComposite paragraph = new TextComposite(TextComponentType.PARAGRAPH);
         TextComposite sentence = new TextComposite(TextComponentType.SENTENCE);
         TextComposite lexeme = new TextComposite(TextComponentType.LEXEME);
-        TextLeaf word = new TextLeaf("Hello", TextComponentType.WORD);
+        SymbolLeaf word = new SymbolLeaf("Hello", TextComponentType.WORD);
 
         lexeme.add(word);
         sentence.add(lexeme);
@@ -68,11 +68,11 @@ class LetterServiceImplTest {
         TextComposite sentence = new TextComposite(TextComponentType.SENTENCE);
 
         TextComposite lexeme1 = new TextComposite(TextComponentType.LEXEME);
-        lexeme1.add(new TextLeaf("Hello", TextComponentType.WORD));
+        lexeme1.add(new SymbolLeaf("Hello", TextComponentType.WORD));
         sentence.add(lexeme1);
 
         TextComposite lexeme2 = new TextComposite(TextComponentType.LEXEME);
-        lexeme2.add(new TextLeaf("World", TextComponentType.WORD));
+        lexeme2.add(new SymbolLeaf("World", TextComponentType.WORD));
         sentence.add(lexeme2);
 
         paragraph.add(sentence);
@@ -93,8 +93,8 @@ class LetterServiceImplTest {
         TextComposite sentence = new TextComposite(TextComponentType.SENTENCE);
 
         TextComposite lexeme = new TextComposite(TextComponentType.LEXEME);
-        lexeme.add(new TextLeaf("Hello", TextComponentType.WORD));
-        lexeme.add(new TextLeaf("!", TextComponentType.PUNCTUATION));
+        lexeme.add(new SymbolLeaf("Hello", TextComponentType.WORD));
+        lexeme.add(new SymbolLeaf("!", TextComponentType.PUNCTUATION));
         sentence.add(lexeme);
 
         paragraph.add(sentence);
@@ -116,23 +116,23 @@ class LetterServiceImplTest {
         // Sentence 1: "Hello world"
         TextComposite sentence1 = new TextComposite(TextComponentType.SENTENCE);
         TextComposite lexeme1 = new TextComposite(TextComponentType.LEXEME);
-        lexeme1.add(new TextLeaf("Hello", TextComponentType.WORD));
+        lexeme1.add(new SymbolLeaf("Hello", TextComponentType.WORD));
         sentence1.add(lexeme1);
         TextComposite lexeme2 = new TextComposite(TextComponentType.LEXEME);
-        lexeme2.add(new TextLeaf("world", TextComponentType.WORD));
+        lexeme2.add(new SymbolLeaf("world", TextComponentType.WORD));
         sentence1.add(lexeme2);
         paragraph.add(sentence1);
 
         // Sentence 2: "How are you"
         TextComposite sentence2 = new TextComposite(TextComponentType.SENTENCE);
         TextComposite lexeme3 = new TextComposite(TextComponentType.LEXEME);
-        lexeme3.add(new TextLeaf("How", TextComponentType.WORD));
+        lexeme3.add(new SymbolLeaf("How", TextComponentType.WORD));
         sentence2.add(lexeme3);
         TextComposite lexeme4 = new TextComposite(TextComponentType.LEXEME);
-        lexeme4.add(new TextLeaf("are", TextComponentType.WORD));
+        lexeme4.add(new SymbolLeaf("are", TextComponentType.WORD));
         sentence2.add(lexeme4);
         TextComposite lexeme5 = new TextComposite(TextComponentType.LEXEME);
-        lexeme5.add(new TextLeaf("you", TextComponentType.WORD));
+        lexeme5.add(new SymbolLeaf("you", TextComponentType.WORD));
         sentence2.add(lexeme5);
         paragraph.add(sentence2);
 
@@ -178,8 +178,8 @@ class LetterServiceImplTest {
         TextComposite sentence = new TextComposite(TextComponentType.SENTENCE);
 
         TextComposite lexeme = new TextComposite(TextComponentType.LEXEME);
-        lexeme.add(new TextLeaf("Hello", TextComponentType.WORD));
-        lexeme.add(new TextLeaf("!", TextComponentType.PUNCTUATION));
+        lexeme.add(new SymbolLeaf("Hello", TextComponentType.WORD));
+        lexeme.add(new SymbolLeaf("!", TextComponentType.PUNCTUATION));
         sentence.add(lexeme);
 
         paragraph.add(sentence);
@@ -200,12 +200,12 @@ class LetterServiceImplTest {
         TextComposite sentence = new TextComposite(TextComponentType.SENTENCE);
 
         TextComposite lexeme1 = new TextComposite(TextComponentType.LEXEME);
-        lexeme1.add(new TextLeaf("Hello", TextComponentType.WORD));
+        lexeme1.add(new SymbolLeaf("Hello", TextComponentType.WORD));
         sentence.add(lexeme1);
 
         TextComposite lexeme2 = new TextComposite(TextComponentType.LEXEME);
-        lexeme2.add(new TextLeaf("world", TextComponentType.WORD));
-        lexeme2.add(new TextLeaf("!", TextComponentType.PUNCTUATION));
+        lexeme2.add(new SymbolLeaf("world", TextComponentType.WORD));
+        lexeme2.add(new SymbolLeaf("!", TextComponentType.PUNCTUATION));
         sentence.add(lexeme2);
 
         paragraph.add(sentence);
@@ -227,15 +227,15 @@ class LetterServiceImplTest {
 
         TextComposite sentence1 = new TextComposite(TextComponentType.SENTENCE);
         TextComposite lexeme1 = new TextComposite(TextComponentType.LEXEME);
-        lexeme1.add(new TextLeaf("Hello", TextComponentType.WORD));
-        lexeme1.add(new TextLeaf(".", TextComponentType.PUNCTUATION));
+        lexeme1.add(new SymbolLeaf("Hello", TextComponentType.WORD));
+        lexeme1.add(new SymbolLeaf(".", TextComponentType.PUNCTUATION));
         sentence1.add(lexeme1);
         paragraph.add(sentence1);
 
         TextComposite sentence2 = new TextComposite(TextComponentType.SENTENCE);
         TextComposite lexeme2 = new TextComposite(TextComponentType.LEXEME);
-        lexeme2.add(new TextLeaf("Bye", TextComponentType.WORD));
-        lexeme2.add(new TextLeaf("!", TextComponentType.PUNCTUATION));
+        lexeme2.add(new SymbolLeaf("Bye", TextComponentType.WORD));
+        lexeme2.add(new SymbolLeaf("!", TextComponentType.PUNCTUATION));
         sentence2.add(lexeme2);
         paragraph.add(sentence2);
 
@@ -257,7 +257,7 @@ class LetterServiceImplTest {
         TextComposite sentence = new TextComposite(TextComponentType.SENTENCE);
 
         TextComposite lexeme = new TextComposite(TextComponentType.LEXEME);
-        lexeme.add(new TextLeaf("HeLLo", TextComponentType.WORD));
+        lexeme.add(new SymbolLeaf("HeLLo", TextComponentType.WORD));
         sentence.add(lexeme);
 
         paragraph.add(sentence);
@@ -278,7 +278,7 @@ class LetterServiceImplTest {
         TextComposite sentence = new TextComposite(TextComponentType.SENTENCE);
 
         TextComposite lexeme = new TextComposite(TextComponentType.LEXEME);
-        lexeme.add(new TextLeaf("Hello123", TextComponentType.WORD));
+        lexeme.add(new SymbolLeaf("Hello123", TextComponentType.WORD));
         sentence.add(lexeme);
 
         paragraph.add(sentence);

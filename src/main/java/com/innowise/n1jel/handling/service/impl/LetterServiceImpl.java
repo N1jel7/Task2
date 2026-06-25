@@ -14,7 +14,10 @@ public class LetterServiceImpl implements LetterService {
             log.warn("Text is null, returning 0");
             return 0;
         }
-        return countLettersRecursive(text);
+        log.debug("Counting letters in text");
+        int result = countLettersRecursive(text);
+        log.info("Total letters: {}", result);
+        return result;
     }
 
     @Override
@@ -23,7 +26,10 @@ public class LetterServiceImpl implements LetterService {
             log.warn("Text is null, returning 0");
             return 0;
         }
-        return countSymbolsRecursive(text);
+        log.debug("Counting symbols in text");
+        int result = countSymbolsRecursive(text);
+        log.info("Total symbols: {}", result);
+        return result;
     }
 
     private int countLettersRecursive(TextComponent component) {
@@ -32,10 +38,13 @@ public class LetterServiceImpl implements LetterService {
         }
 
         // If it's a leaf - count letters in its content
-        if (component.getChildren().isEmpty()) {
-            return (int) component.getContent().chars()
+        if (component.isLeaf()) {
+            String content = component.reconstruct();
+            int count = (int) content.chars()
                     .filter(Character::isLetter)
                     .count();
+            log.debug("Leaf '{}' has {} letters", content, count);
+            return count;
         }
 
         // If it's a composite - sum letters from all children
@@ -43,6 +52,7 @@ public class LetterServiceImpl implements LetterService {
         for (TextComponent child : component.getChildren()) {
             total += countLettersRecursive(child);
         }
+        log.debug("Composite {} has total {} letters", component.getType(), total);
         return total;
     }
 
@@ -52,8 +62,11 @@ public class LetterServiceImpl implements LetterService {
         }
 
         // If it's a leaf - count all characters in its content
-        if (component.getChildren().isEmpty()) {
-            return component.getContent().length();
+        if (component.isLeaf()) {
+            String content = component.reconstruct();
+            int count = content.length();
+            log.debug("Leaf '{}' has {} symbols", content, count);
+            return count;
         }
 
         // If it's a composite - sum symbols from all children
@@ -61,6 +74,7 @@ public class LetterServiceImpl implements LetterService {
         for (TextComponent child : component.getChildren()) {
             total += countSymbolsRecursive(child);
         }
+        log.debug("Composite {} has total {} symbols", component.getType(), total);
         return total;
     }
 }

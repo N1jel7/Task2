@@ -1,28 +1,34 @@
 package com.innowise.n1jel.handling.entity;
 
-import com.innowise.n1jel.handling.exception.TextCustomException;
-
 import java.util.List;
 
 public abstract class TextComponent {
 
-    public abstract TextComponentType getType();
+    private final TextComponentType type;
 
-    public boolean add(TextComponent component) throws TextCustomException {
-        throw new TextCustomException("Cannot add child to a leaf node");
+    protected TextComponent(TextComponentType type) {
+        this.type = type;
     }
 
-    public boolean remove(TextComponent component) throws TextCustomException {
-        throw new TextCustomException("Cannot remove child from a leaf node");
+    public TextComponentType getType() {
+        return type;
+    }
+
+    public abstract boolean isLeaf();
+
+    public boolean add(TextComponent component) {
+        throw new UnsupportedOperationException("Cannot add child to a leaf node");
+    }
+
+    public boolean remove(TextComponent component) {
+        throw new UnsupportedOperationException("Cannot remove child from a leaf node");
     }
 
     public List<TextComponent> getChildren() {
-        return List.of();
+        throw new UnsupportedOperationException("Cannot get children from a leaf node");
     }
 
-    public String getContent() {
-        return "";
-    }
+    public abstract String reconstruct();
 
     @Override
     public abstract String toString();

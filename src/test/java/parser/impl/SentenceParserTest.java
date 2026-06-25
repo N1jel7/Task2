@@ -96,11 +96,13 @@ class SentenceParserTest {
                 () -> assertEquals(4, result.getChildren().size(), "Should have 4 sentences"),
                 () -> {
                     TextComponent firstSentence = result.getChildren().getFirst();
-                    assertTrue(firstSentence.toString().contains("Hello world!"), "First sentence should be 'Hello world!'");
+                    assertTrue(firstSentence.reconstruct().contains("Hello world!"),
+                            "First sentence should contain 'Hello world!'");
                 },
                 () -> {
                     TextComponent lastSentence = result.getChildren().get(3);
-                    assertTrue(lastSentence.toString().contains("Goodbye!"), "Last sentence should be 'Goodbye!'");
+                    assertTrue(lastSentence.reconstruct().contains("Goodbye!"),
+                            "Last sentence should contain 'Goodbye!'");
                 }
         );
     }
@@ -120,7 +122,8 @@ class SentenceParserTest {
                 () -> assertEquals(3, result.getChildren().size(), "Should have 3 sentences"),
                 () -> {
                     TextComponent firstSentence = result.getChildren().getFirst();
-                    assertTrue(firstSentence.toString().contains("Привет мир"), "First sentence should be 'Привет мир'");
+                    assertTrue(firstSentence.reconstruct().contains("Привет мир"),
+                            "First sentence should contain 'Привет мир'");
                 }
         );
     }
@@ -148,7 +151,7 @@ class SentenceParserTest {
 
         // when
         TextComponent result = sentenceParser.handleRequest(text);
-        String restored = result.toString();
+        String restored = result.reconstruct();
 
         // then
         assertAll(
@@ -173,7 +176,7 @@ class SentenceParserTest {
                 () -> assertEquals(2, result.getChildren().size(), "Should have 2 sentences"),
                 () -> {
                     TextComponent firstSentence = result.getChildren().getFirst();
-                    assertTrue(firstSentence.toString().contains("Hello, world!"),
+                    assertTrue(firstSentence.reconstruct().contains("Hello, world!"),
                             "First sentence should contain 'Hello, world!'");
                 }
         );
