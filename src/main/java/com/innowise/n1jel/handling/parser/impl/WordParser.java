@@ -29,7 +29,7 @@ public class WordParser extends AbstractTextParser {
 
     @Override
     public TextComponent handleRequest(String text) throws TextCustomException {
-        if (text == null || text.trim().isEmpty()) {
+        if (text == null || text.trim().isBlank()) {
             return null;
         }
 

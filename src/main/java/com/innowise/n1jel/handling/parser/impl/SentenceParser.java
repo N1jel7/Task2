@@ -30,7 +30,7 @@ public class SentenceParser extends AbstractTextParser {
 
     @Override
     public TextComponent handleRequest(String text) throws TextCustomException {
-        if (text == null || text.trim().isEmpty()) {
+        if (text == null || text.trim().isBlank()) {
             return null;
         }
 
@@ -40,7 +40,7 @@ public class SentenceParser extends AbstractTextParser {
 
         for (String sentenceText : sentences) {
             String trimmed = sentenceText.trim();
-            if (!trimmed.isEmpty()) {
+            if (!trimmed.isBlank()) {
                 log.debug("Found sentence: '{}'",
                         trimmed.length() > 50 ? trimmed.substring(0, 50) + "..." : trimmed);
 
@@ -68,13 +68,13 @@ public class SentenceParser extends AbstractTextParser {
 
         while (matcher.find()) {
             String sentence = matcher.group().trim();
-            if (!sentence.isEmpty()) {
+            if (!sentence.isBlank()) {
                 sentences.add(sentence);
             }
         }
 
         // If no sentences found, treat whole text as one sentence
-        if (sentences.isEmpty() && !text.trim().isEmpty()) {
+        if (sentences.isEmpty() && !text.trim().isBlank()) {
             sentences.add(text.trim());
         }
 

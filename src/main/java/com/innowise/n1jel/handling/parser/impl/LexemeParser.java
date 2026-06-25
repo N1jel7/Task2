@@ -27,7 +27,7 @@ public class LexemeParser extends AbstractTextParser {
 
     @Override
     public TextComponent handleRequest(String text) throws TextCustomException {
-        if (text == null || text.trim().isEmpty()) {
+        if (text == null || text.trim().isBlank()) {
             return null;
         }
 
@@ -36,7 +36,7 @@ public class LexemeParser extends AbstractTextParser {
 
         for (String lexemeText : lexemes) {
             String trimmed = lexemeText.trim();
-            if (!trimmed.isEmpty()) {
+            if (!trimmed.isBlank()) {
                 log.debug("Found lexeme: '{}'", trimmed);
 
                 TextComposite lexeme = new TextComposite(TextComponentType.LEXEME);

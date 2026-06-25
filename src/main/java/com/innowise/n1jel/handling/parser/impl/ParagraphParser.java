@@ -27,7 +27,7 @@ public class ParagraphParser extends AbstractTextParser {
 
     @Override
     public TextComponent handleRequest(String text) throws TextCustomException {
-        if (text == null || text.trim().isEmpty()) {
+        if (text == null || text.trim().isBlank()) {
             return null;
         }
 
@@ -36,7 +36,7 @@ public class ParagraphParser extends AbstractTextParser {
 
         for (String paragraphText : paragraphs) {
             String trimmed = paragraphText.trim();
-            if (!trimmed.isEmpty()) {
+            if (!trimmed.isBlank()) {
                 log.debug("Found paragraph: '{}'",
                         trimmed.length() > 30 ? trimmed.substring(0, 30) + "..." : trimmed);
 
