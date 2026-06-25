@@ -25,7 +25,10 @@ public class SymbolLeaf extends TextComponent {
 
     @Override
     public String toString() {
-        return content;
+        final StringBuilder sb = new StringBuilder("SymbolLeaf{");
+        sb.append("content='").append(content).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 
     @Override
